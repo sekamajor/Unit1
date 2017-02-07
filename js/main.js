@@ -1,5 +1,6 @@
 function initialize(){
     cities();
+    debugAjax();
 
 };
 
@@ -93,15 +94,45 @@ function addEvents(){
 
     $("table").css("color", color);
   };
-//pop up message when you click on the screen
+
+  });
+  //pop up message when you click on the screen
   function clickme(){
 
     alert('Hey, you clicked me!');
   };
-
+  
   $("table").on("click", clickme);
-  });
 };
+
+//this function requests/locates the file that you're requesting
+function debugAjax(){
+  //this variable represents the data that will be converted into visible form
+  var mydata;
+  //this jquery function searches for the desired file using a specific address
+  $.ajax("data/map.geojson", {
+    //specifies the type of file we're searching for
+    dataType: "json",
+    success: function(response){
+      //now that are file was successfully found, we will make it the value of the mydata variable
+      mydata = response;
+      debugCallback(mydata);
+      
+    }
+  });
+
+  
+//this function converts our data from it's raw data form into a string that will be displayed on the site
+function debugCallback(response){
+  //data in string form
+  var dataString; 
+  //dataString value is filled with our data that's now converted to string
+  dataString = JSON.stringify(response);
+  //the string is appended to the new division in the html
+  $("#geojson").append("<br>GeoJSON data:</br>" + dataString);
+  };
+};
+
 
 //call the initialize function when the window has loaded
 $(document).ready(initialize);
